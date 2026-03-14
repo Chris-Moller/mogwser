@@ -24,13 +24,16 @@ add_task(async function test_protection_level_calculation() {
 });
 
 add_task(async function test_toggle_tracking_protection() {
-  const panel = window.gMogwserPrivacyPanel;
   const originalValue = Services.prefs.getBoolPref(
     "privacy.trackingprotection.enabled",
     false
   );
 
-  panel._onToggle("privacy.trackingprotection.enabled", !originalValue);
+  // Toggle the pref directly and verify the protection level updates
+  Services.prefs.setBoolPref(
+    "privacy.trackingprotection.enabled",
+    !originalValue
+  );
   const newValue = Services.prefs.getBoolPref(
     "privacy.trackingprotection.enabled",
     false

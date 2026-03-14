@@ -44,7 +44,7 @@ add_task(async function test_compact_mode_fires_event() {
     eventFired = true;
     eventDetail = e.detail;
   };
-  document.addEventListener("MogwserCompactModeChanged", handler);
+  window.addEventListener("MogwserCompactModeChanged", handler);
 
   compactMode.toggle();
 
@@ -54,6 +54,6 @@ add_task(async function test_compact_mode_fires_event() {
     "Event detail should contain compact boolean"
   );
 
-  document.removeEventListener("MogwserCompactModeChanged", handler);
+  window.removeEventListener("MogwserCompactModeChanged", handler);
   compactMode.disable();
 });

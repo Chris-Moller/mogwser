@@ -12,21 +12,21 @@ const { MogwserGradientPicker } = ChromeUtils.importESModule(
 );
 
 add_task(async function test_hsl_to_rgb_red() {
-  const [r, g, b] = MogwserGradientPicker.hslToRgb(0, 100, 50);
+  const { r, g, b } = MogwserGradientPicker.hslToRgb(0, 100, 50);
   Assert.equal(r, 255, "Red channel should be 255 for pure red");
   Assert.equal(g, 0, "Green channel should be 0 for pure red");
   Assert.equal(b, 0, "Blue channel should be 0 for pure red");
 });
 
 add_task(async function test_hsl_to_rgb_green() {
-  const [r, g, b] = MogwserGradientPicker.hslToRgb(120, 100, 50);
+  const { r, g, b } = MogwserGradientPicker.hslToRgb(120, 100, 50);
   Assert.equal(r, 0, "Red channel should be 0 for pure green");
   Assert.equal(g, 255, "Green channel should be 255 for pure green");
   Assert.equal(b, 0, "Blue channel should be 0 for pure green");
 });
 
 add_task(async function test_hsl_to_rgb_blue() {
-  const [r, g, b] = MogwserGradientPicker.hslToRgb(240, 100, 50);
+  const { r, g, b } = MogwserGradientPicker.hslToRgb(240, 100, 50);
   Assert.equal(r, 0, "Red should be 0 for pure blue");
   Assert.equal(g, 0, "Green should be 0 for pure blue");
   Assert.equal(b, 255, "Blue should be 255 for pure blue");

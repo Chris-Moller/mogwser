@@ -42,7 +42,7 @@ add_task(async function test_theme_fires_event() {
   let eventFired = false;
 
   const handler = () => { eventFired = true; };
-  document.addEventListener("MogwserThemeChanged", handler);
+  window.addEventListener("MogwserThemeChanged", handler);
 
   engine.applyTheme({
     id: "event-test",
@@ -60,5 +60,5 @@ add_task(async function test_theme_fires_event() {
   });
 
   Assert.ok(eventFired, "MogwserThemeChanged event should fire");
-  document.removeEventListener("MogwserThemeChanged", handler);
+  window.removeEventListener("MogwserThemeChanged", handler);
 });

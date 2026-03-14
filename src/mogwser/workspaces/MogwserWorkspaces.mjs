@@ -104,7 +104,7 @@ export class MogwserWorkspaces {
     gBrowser.tabContainer.addEventListener("TabOpen", MogwserWorkspaces);
 
     // Listen for session restore
-    document.addEventListener(
+    window.addEventListener(
       "MogwserSessionRestored",
       MogwserWorkspaces._onSessionRestored
     );
@@ -266,7 +266,7 @@ export class MogwserWorkspaces {
     }
 
     // Fire workspace changed event
-    document.dispatchEvent(
+    window.dispatchEvent(
       new CustomEvent("MogwserWorkspaceChanged", {
         detail: {
           workspaceId: id,

@@ -25,8 +25,10 @@ add_task(async function test_create_split() {
   Assert.ok(group, "Split group should be created");
   Assert.equal(group.tabIds.size, 2, "Group should contain 2 tabs");
 
-  splitView.removeSplit(group.id, tab1.linkedPanel);
-  splitView.removeSplit(group.id, tab2.linkedPanel);
+  // Use the same tab ID format as MogwserSplitView._getTabId
+  for (const tabId of group.tabIds) {
+    splitView.removeSplit(group.id, tabId);
+  }
   BrowserTestUtils.removeTab(tab1);
   BrowserTestUtils.removeTab(tab2);
 });

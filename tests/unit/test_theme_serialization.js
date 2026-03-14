@@ -42,23 +42,13 @@ add_task(async function test_export_produces_valid_json() {
 });
 
 add_task(async function test_import_rejects_invalid_json() {
-  let threw = false;
-  try {
-    MogwserThemeEngine.importTheme("not valid json {{{");
-  } catch (e) {
-    threw = true;
-  }
-  Assert.ok(threw, "Import should throw for invalid JSON");
+  const result = MogwserThemeEngine.importTheme("not valid json {{{");
+  Assert.equal(result, null, "Import should return null for invalid JSON");
 });
 
 add_task(async function test_import_rejects_missing_fields() {
-  let threw = false;
-  try {
-    MogwserThemeEngine.importTheme(JSON.stringify({ name: "Incomplete" }));
-  } catch (e) {
-    threw = true;
-  }
-  Assert.ok(threw, "Import should throw for missing required fields");
+  const result = MogwserThemeEngine.importTheme(JSON.stringify({ name: "Incomplete" }));
+  Assert.equal(result, null, "Import should return null for missing required fields");
 });
 
 add_task(async function test_roundtrip_serialization() {
