@@ -1,0 +1,14 @@
+# Mogwser macOS aarch64 Build Configuration
+ac_add_options --with-branding=browser/branding/mogwser
+ac_add_options --with-app-name=mogwser
+ac_add_options --enable-application=browser
+ac_add_options --disable-tests
+ac_add_options --enable-optimize="-mcpu=apple-m1 -march=armv8.3-a+simd -O3"
+ac_add_options --target=aarch64-apple-darwin
+ac_add_options --enable-lto=full
+ac_add_options --with-ccache=sccache
+
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-@CONFIG_GUESS@
+mk_add_options AUTOCLOBBER=1
+
+export MOZ_REQUIRE_SIGNING=

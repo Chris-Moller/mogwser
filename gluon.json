@@ -1,0 +1,23 @@
+{
+  "name": "Mogwser",
+  "vendor": "Mogwser",
+  "appId": "mogwser@mogwser.app",
+  "binaryName": "mogwser",
+  "version": {
+    "product": "Mogwser",
+    "version": "1.0.0"
+  },
+  "buildTargets": [
+    "linux-x86_64",
+    "macos-x86_64",
+    "macos-aarch64",
+    "windows-x86_64"
+  ],
+  "Firefox": {
+    "version": "128.0",
+    "channel": "esr"
+  },
+  "branding": "browser/branding/mogwser",
+  "patchesDir": "patches",
+  "srcDir": "src"
+}

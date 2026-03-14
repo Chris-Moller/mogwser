@@ -1,0 +1,23 @@
+--- a/browser/base/content/browser.xhtml
++++ b/browser/base/content/browser.xhtml
+@@ -1,6 +1,9 @@
+ <?xml version="1.0"?>
+ <!-- This Source Code Form is subject to the terms of the Mozilla Public
+    - License, v. 2.0. -->
++<!-- Mogwser: Load custom browser chrome shell -->
++<link rel="stylesheet" href="chrome://mogwser/content/shell/mogwser-shell.css" />
++<script type="module" src="chrome://mogwser/content/shell/MogwserShell.mjs"></script>
+
+ <html xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+@@ -50,6 +53,10 @@
+   <body>
+     <div id="browser">
+       <!-- Default Firefox chrome content -->
++
++      <!-- Mogwser Shell Insertion Point -->
++      <!-- The Mogwser shell overlays the default UI with its sidebar-based layout -->
++      <div id="mogwser-shell-root" hidden="false"></div>
+     </div>
+   </body>
+ </html>

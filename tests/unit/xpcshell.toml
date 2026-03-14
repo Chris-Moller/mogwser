@@ -1,0 +1,10 @@
+[DEFAULT]
+head = ""
+
+["test_workspace_storage.js"]
+
+["test_splitview_tree.js"]
+
+["test_theme_colors.js"]
+
+["test_theme_serialization.js"]

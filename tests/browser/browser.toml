@@ -1,0 +1,18 @@
+[DEFAULT]
+support-files = []
+
+["browser_mogwser_shell_init.js"]
+
+["browser_mogwser_tabs.js"]
+
+["browser_mogwser_workspaces.js"]
+
+["browser_mogwser_splitview.js"]
+
+["browser_mogwser_compact.js"]
+
+["browser_mogwser_sidepanel.js"]
+
+["browser_mogwser_themes.js"]
+
+["browser_mogwser_privacy.js"]

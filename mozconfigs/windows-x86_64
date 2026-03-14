@@ -1,0 +1,13 @@
+# Mogwser Windows x86_64 Build Configuration
+ac_add_options --with-branding=browser/branding/mogwser
+ac_add_options --with-app-name=mogwser
+ac_add_options --enable-application=browser
+ac_add_options --disable-tests
+ac_add_options --enable-optimize="-O3 -ftree-vectorize"
+ac_add_options --enable-lto=full
+ac_add_options --with-ccache=sccache
+
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-@CONFIG_GUESS@
+mk_add_options AUTOCLOBBER=1
+
+export MOZ_REQUIRE_SIGNING=

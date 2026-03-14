@@ -1,0 +1,124 @@
+# Mogwser Browser — Default Preferences
+# All preferences are under the "mogwser." namespace
+
+# Sidebar
+mogwser.sidebar.width:
+  type: int
+  value: 250
+  description: "Default sidebar width in pixels"
+
+mogwser.sidebar.position:
+  type: string
+  value: "left"
+  description: "Sidebar position (left or right)"
+
+# Compact Mode
+mogwser.compact.enabled:
+  type: bool
+  value: false
+  description: "Enable compact (favicon-only) sidebar mode"
+
+mogwser.compact.autohide:
+  type: bool
+  value: true
+  description: "Auto-hide sidebar in compact mode"
+
+# Workspaces
+mogwser.workspaces.enabled:
+  type: bool
+  value: true
+  description: "Enable workspace tab groups"
+
+mogwser.workspaces.show-all-pinned:
+  type: bool
+  value: true
+  description: "Show pinned tabs across all workspaces"
+
+# Split View
+mogwser.splitview.enabled:
+  type: bool
+  value: true
+  description: "Enable split-view browsing"
+
+mogwser.splitview.min-panel-size:
+  type: int
+  value: 7
+  description: "Minimum panel size as percentage of container"
+
+mogwser.splitview.max-panels:
+  type: int
+  value: 4
+  description: "Maximum number of panels in a split group"
+
+# Side Panel
+mogwser.sidepanel.enabled:
+  type: bool
+  value: true
+  description: "Enable web side-panels"
+
+mogwser.sidepanel.url:
+  type: string
+  value: ""
+  description: "Currently loaded side-panel URL"
+
+mogwser.sidepanel.open:
+  type: bool
+  value: false
+  description: "Whether side-panel is open"
+
+mogwser.sidepanel.height:
+  type: int
+  value: 300
+  description: "Side-panel height in pixels"
+
+mogwser.sidepanel.pinned:
+  type: string
+  value: "[]"
+  description: "JSON array of pinned side-panel URLs"
+
+# Themes
+mogwser.theme.active-id:
+  type: string
+  value: "default"
+  description: "Active theme identifier"
+
+mogwser.theme.gradient:
+  type: string
+  value: ""
+  description: "JSON of current gradient configuration"
+
+mogwser.themes.gradient-enabled:
+  type: bool
+  value: true
+  description: "Enable gradient background themes"
+
+mogwser.theme.custom-colors:
+  type: string
+  value: "[]"
+  description: "JSON array of user-added custom colors"
+
+# Privacy
+mogwser.privacy.tracking-protection:
+  type: bool
+  value: true
+  description: "Enable enhanced tracking protection"
+
+mogwser.privacy.fingerprint-resistance:
+  type: bool
+  value: false
+  description: "Enable fingerprint resistance"
+
+mogwser.privacy.https-only:
+  type: bool
+  value: true
+  description: "Enable HTTPS-only mode"
+
+mogwser.privacy.cookie-behavior:
+  type: int
+  value: 4
+  description: "Cookie behavior (4 = reject trackers + partition)"
+
+mogwser.privacy.first-party-isolation:
+  type: bool
+  value: false
+  description: "Enable first-party isolation"

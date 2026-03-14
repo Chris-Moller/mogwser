@@ -1,0 +1,109 @@
+/* Mogwser Shell — Core Layout and CSS Custom Properties */
+
+:root {
+  /* Sidebar dimensions */
+  --mogwser-sidebar-width: 250px;
+  --mogwser-sidebar-collapsed-width: 48px;
+
+  /* Theme colors */
+  --mogwser-primary-color: #4a90d9;
+  --mogwser-secondary-color: #2c3e50;
+  --mogwser-accent-color: #e74c3c;
+  --mogwser-bg-color: #1a1a2e;
+  --mogwser-bg-opacity: 1;
+  --mogwser-gradient: linear-gradient(135deg, var(--mogwser-primary-color), var(--mogwser-secondary-color));
+
+  /* Compact mode */
+  --mogwser-compact-mode: 0;
+
+  /* Animation */
+  --mogwser-transition-speed: 0.2s;
+
+  /* Text */
+  --mogwser-text-primary: #ffffff;
+  --mogwser-text-secondary: #b0b0b0;
+
+  /* Borders */
+  --mogwser-border-color: rgba(255, 255, 255, 0.1);
+  --mogwser-border-radius: 6px;
+}
+
+/* Shell layout — sidebar + content */
+.mogwser-shell {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.mogwser-shell__sidebar {
+  display: flex;
+  flex-direction: column;
+  width: var(--mogwser-sidebar-width);
+  min-width: var(--mogwser-sidebar-collapsed-width);
+  max-width: 500px;
+  background: var(--mogwser-secondary-color);
+  color: var(--mogwser-text-primary);
+  transition: width var(--mogwser-transition-speed) ease;
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+}
+
+/* Sidebar gradient background via pseudo-element */
+.mogwser-shell__sidebar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--mogwser-gradient);
+  opacity: var(--mogwser-bg-opacity);
+  z-index: -1;
+  transition: opacity var(--mogwser-transition-speed) ease;
+}
+
+/* Workspace container at top of sidebar */
+.mogwser-shell__workspace-container {
+  flex-shrink: 0;
+  padding: 8px;
+  border-bottom: 1px solid var(--mogwser-border-color);
+}
+
+/* Tabs container fills remaining space */
+.mogwser-shell__tabs-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Side-panel at bottom of sidebar */
+.mogwser-shell__sidepanel-container {
+  flex-shrink: 0;
+  border-top: 1px solid var(--mogwser-border-color);
+}
+
+/* Splitter between sidebar and content */
+.mogwser-shell__splitter {
+  width: 4px;
+  cursor: col-resize;
+  background: var(--mogwser-border-color);
+  transition: background var(--mogwser-transition-speed) ease;
+}
+
+.mogwser-shell__splitter:hover {
+  background: var(--mogwser-primary-color);
+}
+
+/* Content area */
+.mogwser-shell__content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Split-view container fills content area */
+.mogwser-shell__splitview-container {
+  position: absolute;
+  inset: 0;
+}

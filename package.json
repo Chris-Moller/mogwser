@@ -1,0 +1,22 @@
+{
+  "name": "mogwser",
+  "version": "1.0.0",
+  "description": "Mogwser — a custom Firefox fork with sidebar tabs, workspaces, split-view, themes, and privacy tools",
+  "private": true,
+  "scripts": {
+    "init": "gluon download && gluon bootstrap",
+    "import": "gluon import",
+    "export": "gluon export",
+    "build": "gluon build",
+    "build:ui": "gluon build --ui-only",
+    "start": "gluon run",
+    "package": "gluon package",
+    "test": "cd engine && ./mach test testing/mogwser/"
+  },
+  "devDependencies": {
+    "gluon-build": "next"
+  },
+  "engines": {
+    "node": ">=21.0.0"
+  }
+}

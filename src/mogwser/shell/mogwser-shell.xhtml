@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<head>
+  <link rel="stylesheet" href="chrome://mogwser/content/shell/mogwser-shell.css" />
+  <link rel="stylesheet" href="chrome://mogwser/content/tabs/mogwser-tabs.css" />
+  <link rel="stylesheet" href="chrome://mogwser/content/workspaces/mogwser-workspaces.css" />
+  <link rel="stylesheet" href="chrome://mogwser/content/splitview/mogwser-splitview.css" />
+  <link rel="stylesheet" href="chrome://mogwser/content/compact/mogwser-compact.css" />
+  <link rel="stylesheet" href="chrome://mogwser/content/sidepanel/mogwser-sidepanel.css" />
+  <link rel="stylesheet" href="chrome://mogwser/content/themes/mogwser-themes.css" />
+  <link rel="stylesheet" href="chrome://mogwser/content/privacy/mogwser-privacy.css" />
+</head>
+<body>
+  <div id="mogwser-shell" class="mogwser-shell">
+    <!-- Sidebar: tabs, workspaces, side-panel -->
+    <div id="mogwser-sidebar" class="mogwser-shell__sidebar">
+      <!-- mogwser-workspace-slot -->
+      <div id="mogwser-workspace-container" class="mogwser-shell__workspace-container">
+        <!-- Workspace switcher UI injected here by MogwserWorkspaces.mjs -->
+      </div>
+
+      <!-- mogwser-tabs-slot -->
+      <div id="mogwser-tabs-container" class="mogwser-shell__tabs-container">
+        <!-- Vertical tab bar injected here by MogwserTabBar.mjs -->
+      </div>
+
+      <!-- mogwser-sidepanel-slot -->
+      <div id="mogwser-sidepanel-container" class="mogwser-shell__sidepanel-container">
+        <!-- Web side-panel injected here by MogwserSidePanel.mjs -->
+      </div>
+    </div>
+
+    <!-- Splitter between sidebar and content -->
+    <div id="mogwser-splitter" class="mogwser-shell__splitter"></div>
+
+    <!-- Content area: browser decks and split-view -->
+    <div id="mogwser-content" class="mogwser-shell__content">
+      <!-- mogwser-splitview-slot -->
+      <div id="mogwser-splitview-container" class="mogwser-shell__splitview-container">
+        <!-- Split-view overlay injected here by MogwserSplitView.mjs -->
+      </div>
+    </div>
+  </div>
+</body>
+</html>
