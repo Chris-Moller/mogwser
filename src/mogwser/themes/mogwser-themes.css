@@ -1,0 +1,350 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* =========================================================================
+   Mogwser Theme Engine Styles
+   - Gradient background rendering on sidebar
+   - Double-buffer pseudo-elements for theme transitions
+   - Theme picker panel styles
+   - Color wheel canvas styles
+   - Theme list styles
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   Sidebar gradient background rendering
+   The sidebar's ::before pseudo-element shows the current gradient.
+   This is set in mogwser-shell.css — here we layer the transition buffer.
+   ------------------------------------------------------------------------- */
+
+.mogwser-shell__sidebar {
+  position: relative;
+}
+
+/* Double-buffer: ::after holds the NEXT gradient during transitions */
+.mogwser-shell__sidebar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--mogwser-next-gradient, transparent);
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.mogwser-shell__sidebar.mogwser-theme-transitioning::after {
+  opacity: 1;
+}
+
+.mogwser-shell__sidebar.mogwser-theme-transitioning::before {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* -------------------------------------------------------------------------
+   Theme picker panel (opened from sidebar settings or toolbar)
+   ------------------------------------------------------------------------- */
+
+.mogwser-theme-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 380px;
+  max-height: 80vh;
+  background: var(--mogwser-secondary-color, #2c3e50);
+  color: var(--mogwser-text-primary, #fff);
+  border: 1px solid var(--mogwser-border-color, rgba(255, 255, 255, 0.1));
+  border-radius: var(--mogwser-border-radius, 6px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  z-index: 10000;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.mogwser-theme-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--mogwser-border-color);
+  flex-shrink: 0;
+}
+
+.mogwser-theme-panel__title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.mogwser-theme-panel__close {
+  background: none;
+  border: none;
+  color: var(--mogwser-text-secondary, #b0b0b0);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 4px;
+  line-height: 1;
+}
+
+.mogwser-theme-panel__close:hover {
+  color: var(--mogwser-text-primary, #fff);
+}
+
+.mogwser-theme-panel__body {
+  padding: 16px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* -------------------------------------------------------------------------
+   Color wheel canvas
+   ------------------------------------------------------------------------- */
+
+.mogwser-gradient-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mogwser-gradient-picker__wheel-section {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.mogwser-gradient-picker__canvas {
+  border-radius: 50%;
+  cursor: crosshair;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* -------------------------------------------------------------------------
+   Sliders (lightness, saturation, angle)
+   ------------------------------------------------------------------------- */
+
+.mogwser-gradient-picker__slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mogwser-gradient-picker__label {
+  font-size: 12px;
+  color: var(--mogwser-text-secondary, #b0b0b0);
+  min-width: 90px;
+  flex-shrink: 0;
+}
+
+.mogwser-gradient-picker__slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  outline: none;
+}
+
+.mogwser-gradient-picker__slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--mogwser-primary-color, #4a90d9);
+  border: 2px solid #fff;
+  cursor: pointer;
+}
+
+.mogwser-gradient-picker__slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--mogwser-primary-color, #4a90d9);
+  border: 2px solid #fff;
+  cursor: pointer;
+}
+
+/* -------------------------------------------------------------------------
+   Gradient preview bar and stop handles
+   ------------------------------------------------------------------------- */
+
+.mogwser-gradient-picker__preview-section {
+  position: relative;
+}
+
+.mogwser-gradient-picker__preview {
+  height: 32px;
+  border-radius: var(--mogwser-border-radius, 6px);
+  border: 1px solid var(--mogwser-border-color, rgba(255, 255, 255, 0.1));
+}
+
+.mogwser-gradient-picker__stops {
+  position: relative;
+  height: 20px;
+  margin-top: 4px;
+}
+
+.mogwser-gradient-picker__stop-handle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  cursor: pointer;
+  transform: translateX(-50%);
+  top: 3px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  padding: 0;
+}
+
+.mogwser-gradient-picker__stop-handle:hover {
+  transform: translateX(-50%) scale(1.2);
+}
+
+/* -------------------------------------------------------------------------
+   Color harmony buttons
+   ------------------------------------------------------------------------- */
+
+.mogwser-gradient-picker__harmony-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.mogwser-gradient-picker__harmony-btn {
+  padding: 4px 10px;
+  font-size: 11px;
+  border-radius: 4px;
+  border: 1px solid var(--mogwser-border-color, rgba(255, 255, 255, 0.1));
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--mogwser-text-primary, #fff);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.mogwser-gradient-picker__harmony-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* -------------------------------------------------------------------------
+   Theme list (installed themes gallery)
+   ------------------------------------------------------------------------- */
+
+.mogwser-theme-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mogwser-theme-list__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: var(--mogwser-border-radius, 6px);
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.mogwser-theme-list__item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mogwser-theme-list__item--active {
+  outline: 2px solid var(--mogwser-primary-color, #4a90d9);
+  outline-offset: -2px;
+}
+
+.mogwser-theme-list__swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  border: 1px solid var(--mogwser-border-color, rgba(255, 255, 255, 0.1));
+}
+
+.mogwser-theme-list__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.mogwser-theme-list__name {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mogwser-theme-list__author {
+  font-size: 11px;
+  color: var(--mogwser-text-secondary, #b0b0b0);
+}
+
+.mogwser-theme-list__actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.mogwser-theme-list__action-btn {
+  background: none;
+  border: none;
+  color: var(--mogwser-text-secondary, #b0b0b0);
+  cursor: pointer;
+  padding: 4px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.mogwser-theme-list__action-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--mogwser-text-primary, #fff);
+}
+
+/* -------------------------------------------------------------------------
+   Import / Export buttons
+   ------------------------------------------------------------------------- */
+
+.mogwser-theme-panel__footer {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--mogwser-border-color);
+  flex-shrink: 0;
+}
+
+.mogwser-theme-panel__btn {
+  flex: 1;
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 4px;
+  border: 1px solid var(--mogwser-border-color, rgba(255, 255, 255, 0.1));
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--mogwser-text-primary, #fff);
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.15s ease;
+}
+
+.mogwser-theme-panel__btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.mogwser-theme-panel__btn--primary {
+  background: var(--mogwser-primary-color, #4a90d9);
+  border-color: transparent;
+}
+
+.mogwser-theme-panel__btn--primary:hover {
+  filter: brightness(1.1);
+}
