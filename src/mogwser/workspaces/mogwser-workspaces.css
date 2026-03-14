@@ -1,0 +1,183 @@
+/* Mogwser Workspace Switcher Styles */
+
+/* ─── Switcher Container ──────────────────────────────────────────── */
+
+.mogwser-workspaces__switcher {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ─── Workspace Button ────────────────────────────────────────────── */
+
+.mogwser-workspaces__btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: none;
+  border-radius: var(--mogwser-border-radius);
+  background: transparent;
+  color: var(--mogwser-text-secondary);
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: left;
+  transition:
+    background var(--mogwser-transition-speed) ease,
+    color var(--mogwser-transition-speed) ease;
+  position: relative;
+  width: 100%;
+}
+
+.mogwser-workspaces__btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--mogwser-text-primary);
+}
+
+/* ─── Active Workspace ────────────────────────────────────────────── */
+
+.mogwser-workspaces__btn--active {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--mogwser-text-primary);
+}
+
+.mogwser-workspaces__btn--active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--mogwser-primary-color);
+}
+
+/* ─── Workspace Button Icon ───────────────────────────────────────── */
+
+.mogwser-workspaces__btn-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.mogwser-workspaces__btn--active .mogwser-workspaces__btn-icon {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ─── Workspace Button Label ──────────────────────────────────────── */
+
+.mogwser-workspaces__btn-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ─── Workspace Button Badge (tab count) ──────────────────────────── */
+
+.mogwser-workspaces__btn-badge {
+  flex-shrink: 0;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  font-size: 10px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--mogwser-text-secondary);
+}
+
+.mogwser-workspaces__btn--active .mogwser-workspaces__btn-badge {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--mogwser-text-primary);
+}
+
+/* ─── Add Workspace Button ────────────────────────────────────────── */
+
+.mogwser-workspaces__add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  margin-top: 4px;
+  border: 1px dashed var(--mogwser-border-color);
+  border-radius: var(--mogwser-border-radius);
+  background: transparent;
+  color: var(--mogwser-text-secondary);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  transition:
+    background var(--mogwser-transition-speed) ease,
+    border-color var(--mogwser-transition-speed) ease,
+    color var(--mogwser-transition-speed) ease;
+  width: 100%;
+}
+
+.mogwser-workspaces__add-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--mogwser-primary-color);
+  color: var(--mogwser-primary-color);
+}
+
+/* ─── Context Menu ────────────────────────────────────────────────── */
+
+.mogwser-workspaces__context-menu {
+  position: fixed;
+  z-index: 10000;
+  min-width: 140px;
+  padding: 4px 0;
+  background: var(--mogwser-secondary-color);
+  border: 1px solid var(--mogwser-border-color);
+  border-radius: var(--mogwser-border-radius);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  color: var(--mogwser-text-primary);
+  font-size: 12px;
+}
+
+.mogwser-workspaces__context-menu-item {
+  padding: 6px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--mogwser-transition-speed) ease;
+}
+
+.mogwser-workspaces__context-menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mogwser-workspaces__context-menu-item--danger {
+  color: var(--mogwser-accent-color);
+}
+
+.mogwser-workspaces__context-menu-item--danger:hover {
+  background: rgba(231, 76, 60, 0.15);
+}
+
+/* ─── Compact Mode Adjustments ────────────────────────────────────── */
+
+@container style(--mogwser-compact-mode: 1) {
+  .mogwser-workspaces__btn-label,
+  .mogwser-workspaces__btn-badge {
+    display: none;
+  }
+
+  .mogwser-workspaces__btn {
+    justify-content: center;
+    padding: 6px;
+  }
+
+  .mogwser-workspaces__add-btn {
+    padding: 4px;
+    font-size: 14px;
+  }
+}

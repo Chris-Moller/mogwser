@@ -1,0 +1,17 @@
+--- a/browser/components/sessionstore/SessionStore.sys.mjs
++++ b/browser/components/sessionstore/SessionStore.sys.mjs
+@@ -description: Mogwser session attribute persistence @@
+ // In the tab attribute collection section
++    // Mogwser: Persist workspace and essential attributes
++    const mogwserAttrs = ["mogwser-workspace-id", "mogwser-essential"];
++    for (const attr of mogwserAttrs) {
++      if (tab.hasAttribute(attr)) {
++        tabData.attributes[attr] = tab.getAttribute(attr);
++      }
++    }
+
+ // After session restore completes
++    // Mogwser: Fire session restored event
++    document.dispatchEvent(new CustomEvent("MogwserSessionRestored", {
++      detail: { restoredTabs: tabs }
++    }));

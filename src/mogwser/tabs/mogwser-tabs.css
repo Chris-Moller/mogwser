@@ -1,0 +1,288 @@
+/* Mogwser Vertical Tab Bar Styles */
+
+/* ─── Pinned Tabs Section ─────────────────────────────────────────── */
+
+.mogwser-tabs__pinned {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px;
+  border-bottom: 1px solid var(--mogwser-border-color);
+  min-height: 0;
+}
+
+.mogwser-tabs__pinned:empty {
+  display: none;
+}
+
+/* ─── Unpinned Tabs List ──────────────────────────────────────────── */
+
+.mogwser-tabs__list {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ─── Individual Tab ──────────────────────────────────────────────── */
+
+.mogwser-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  margin: 1px 4px;
+  border-radius: var(--mogwser-border-radius);
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background var(--mogwser-transition-speed) ease,
+    opacity var(--mogwser-transition-speed) ease;
+  position: relative;
+  min-height: 32px;
+  overflow: hidden;
+}
+
+.mogwser-tab:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ─── Active Tab ──────────────────────────────────────────────────── */
+
+.mogwser-tab--active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.mogwser-tab--active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--mogwser-primary-color);
+}
+
+.mogwser-tab--active:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ─── Pinned Tab (compact icon-only in pinned section) ────────────── */
+
+.mogwser-tab--pinned {
+  padding: 6px;
+  margin: 0;
+  border-radius: var(--mogwser-border-radius);
+  min-height: auto;
+  width: 32px;
+  height: 32px;
+  justify-content: center;
+  gap: 0;
+}
+
+.mogwser-tab--pinned .mogwser-tab__title,
+.mogwser-tab--pinned .mogwser-tab__close-btn,
+.mogwser-tab--pinned .mogwser-tab__audio-btn {
+  display: none;
+}
+
+.mogwser-tab--pinned .mogwser-tab__favicon {
+  margin: 0;
+}
+
+/* ─── Loading State ───────────────────────────────────────────────── */
+
+.mogwser-tab--loading .mogwser-tab__favicon-img {
+  opacity: 0.5;
+  animation: mogwser-tab-loading-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes mogwser-tab-loading-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* ─── Dragging State ──────────────────────────────────────────────── */
+
+.mogwser-tab--dragging {
+  opacity: 0.4;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ─── Drop Indicator ──────────────────────────────────────────────── */
+
+.mogwser-tab--drop-indicator {
+  height: 2px;
+  margin: 0 8px;
+  background: var(--mogwser-primary-color);
+  border-radius: 1px;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+/* ─── Favicon ─────────────────────────────────────────────────────── */
+
+.mogwser-tab__favicon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mogwser-tab__favicon-img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  border-radius: 2px;
+}
+
+/* ─── Title ───────────────────────────────────────────────────────── */
+
+.mogwser-tab__title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--mogwser-text-primary);
+}
+
+.mogwser-tab:not(.mogwser-tab--active) .mogwser-tab__title {
+  color: var(--mogwser-text-secondary);
+}
+
+/* ─── Audio Indicator Button ──────────────────────────────────────── */
+
+.mogwser-tab__audio-btn {
+  flex-shrink: 0;
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 2px;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  border-radius: 3px;
+  color: var(--mogwser-text-secondary);
+  transition: background var(--mogwser-transition-speed) ease;
+}
+
+.mogwser-tab__audio-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.mogwser-tab__audio-btn--muted {
+  opacity: 0.6;
+}
+
+/* ─── Close Button ────────────────────────────────────────────────── */
+
+.mogwser-tab__close-btn {
+  flex-shrink: 0;
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 2px 4px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  border-radius: 3px;
+  color: var(--mogwser-text-secondary);
+  opacity: 0;
+  transition:
+    opacity var(--mogwser-transition-speed) ease,
+    background var(--mogwser-transition-speed) ease,
+    color var(--mogwser-transition-speed) ease;
+}
+
+.mogwser-tab:hover .mogwser-tab__close-btn {
+  opacity: 1;
+}
+
+.mogwser-tab__close-btn:hover {
+  background: rgba(255, 80, 80, 0.3);
+  color: #ff5050;
+}
+
+/* ─── Context Menu ────────────────────────────────────────────────── */
+
+.mogwser-tab__context-menu {
+  position: fixed;
+  z-index: 10000;
+  min-width: 180px;
+  padding: 4px 0;
+  background: var(--mogwser-secondary-color);
+  border: 1px solid var(--mogwser-border-color);
+  border-radius: var(--mogwser-border-radius);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  color: var(--mogwser-text-primary);
+  font-size: 12px;
+}
+
+.mogwser-tab__context-menu-item {
+  padding: 6px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--mogwser-transition-speed) ease;
+}
+
+.mogwser-tab__context-menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mogwser-tab__context-menu-separator {
+  height: 1px;
+  margin: 4px 8px;
+  background: var(--mogwser-border-color);
+}
+
+/* ─── Compact Mode Adjustments ────────────────────────────────────── */
+
+@container style(--mogwser-compact-mode: 1) {
+  .mogwser-tab__title,
+  .mogwser-tab__close-btn,
+  .mogwser-tab__audio-btn {
+    display: none;
+  }
+
+  .mogwser-tab {
+    padding: 6px;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .mogwser-tabs__pinned {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* ─── Hidden tabs (workspace filtering) ───────────────────────────── */
+
+.mogwser-tab[hidden] {
+  display: none !important;
+}
+
+/* ─── Scrollbar styling ───────────────────────────────────────────── */
+
+.mogwser-tabs__list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.mogwser-tabs__list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mogwser-tabs__list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+
+.mogwser-tabs__list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}

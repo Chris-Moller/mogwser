@@ -1,0 +1,10 @@
+--- a/browser/base/content/tabbrowser.js
++++ b/browser/base/content/tabbrowser.js
+@@ -description: Mogwser workspace-aware tab creation @@
+ // Inside gBrowser.addTab() method
++    // Mogwser: Assign workspace to new tab
++    if (arguments[1]?.mogwserWorkspaceId) {
++      tab.setAttribute("mogwser-workspace-id", arguments[1].mogwserWorkspaceId);
++    } else if (window.gMogwserWorkspaces?.activeWorkspaceId) {
++      tab.setAttribute("mogwser-workspace-id", window.gMogwserWorkspaces.activeWorkspaceId);
++    }

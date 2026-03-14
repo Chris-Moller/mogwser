@@ -1,0 +1,13 @@
+--- a/browser/base/content/tabs.js
++++ b/browser/base/content/tabs.js
+@@ -description: Mogwser workspace-aware tab visibility @@
++  // Mogwser: Getter for workspace-filtered visible tabs
++  get mogwserVisibleTabs() {
++    if (!window.gMogwserWorkspaces) return this.allTabs;
++    const activeId = window.gMogwserWorkspaces.activeWorkspaceId;
++    return this.allTabs.filter(tab =>
++      tab.getAttribute("mogwser-workspace-id") === activeId ||
++      tab.hasAttribute("mogwser-essential") ||
++      tab.pinned
++    );
++  }
