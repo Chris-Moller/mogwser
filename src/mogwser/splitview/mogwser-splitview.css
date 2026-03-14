@@ -1,0 +1,96 @@
+/* Mogwser Split-View — Panel layout and resize handle styling */
+
+/* Group container fills the split-view slot */
+.mogwser-splitview-group {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* Each panel is a browser element positioned via inset percentages */
+.mogwser-splitview-panel {
+  position: absolute;
+  border: 1px solid var(--mogwser-border-color);
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: opacity 0.1s ease;
+}
+
+.mogwser-splitview-panel:focus-within {
+  border-color: var(--mogwser-primary-color);
+  z-index: 1;
+}
+
+/* Resize handles — shared base */
+.mogwser-splitview-handle {
+  position: absolute;
+  z-index: 10;
+  background: var(--mogwser-border-color);
+  transition: background var(--mogwser-transition-speed) ease;
+  user-select: none;
+  -moz-user-select: none;
+}
+
+.mogwser-splitview-handle:hover,
+.mogwser-splitview-handle--active {
+  background: var(--mogwser-primary-color);
+}
+
+/* Vertical handle — between horizontal (row) panels */
+.mogwser-splitview-handle--vertical {
+  cursor: col-resize;
+  width: 6px;
+}
+
+/* Horizontal handle — between vertical (column) panels */
+.mogwser-splitview-handle--horizontal {
+  cursor: row-resize;
+  height: 6px;
+}
+
+/* Active drag state: expand the hit area and change appearance */
+.mogwser-splitview-handle--active.mogwser-splitview-handle--vertical {
+  width: 8px;
+  margin-left: -1px;
+}
+
+.mogwser-splitview-handle--active.mogwser-splitview-handle--horizontal {
+  height: 8px;
+  margin-top: -1px;
+}
+
+/* Visual grip dots in the center of the handle */
+.mogwser-splitview-handle::after {
+  content: '';
+  position: absolute;
+  border-radius: 1px;
+  background: var(--mogwser-text-secondary);
+  opacity: 0.5;
+}
+
+.mogwser-splitview-handle--vertical::after {
+  width: 2px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mogwser-splitview-handle--horizontal::after {
+  width: 20px;
+  height: 2px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mogwser-splitview-handle:hover::after,
+.mogwser-splitview-handle--active::after {
+  opacity: 1;
+  background: var(--mogwser-text-primary);
+}
+
+/* When no split groups are active, hide the container */
+.mogwser-shell__splitview-container:empty {
+  display: none;
+}

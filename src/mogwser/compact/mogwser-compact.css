@@ -1,0 +1,76 @@
+/* Mogwser Compact Mode — Sidebar collapse/expand styling */
+
+/* Compact state: narrow sidebar showing only icons */
+.mogwser-shell__sidebar[mogwser-compact="true"] {
+  width: var(--mogwser-sidebar-collapsed-width);
+  transition: width var(--mogwser-transition-speed) ease;
+  overflow: hidden;
+}
+
+/* Hide text labels in compact mode */
+.mogwser-shell__sidebar[mogwser-compact="true"] .mogwser-tab__label,
+.mogwser-shell__sidebar[mogwser-compact="true"] .mogwser-workspace__label,
+.mogwser-shell__sidebar[mogwser-compact="true"] .mogwser-sidepanel__urlbar,
+.mogwser-shell__sidebar[mogwser-compact="true"] .mogwser-sidepanel__title {
+  display: none;
+}
+
+/* Icons remain centered in compact mode */
+.mogwser-shell__sidebar[mogwser-compact="true"] .mogwser-tab__icon,
+.mogwser-shell__sidebar[mogwser-compact="true"] .mogwser-workspace__icon {
+  margin: 0 auto;
+}
+
+/* Truncate workspace container in compact mode */
+.mogwser-shell__sidebar[mogwser-compact="true"] .mogwser-shell__workspace-container {
+  padding: 4px;
+  text-align: center;
+}
+
+/* Collapse side-panel in compact mode */
+.mogwser-shell__sidebar[mogwser-compact="true"] .mogwser-shell__sidepanel-container {
+  height: 0;
+  overflow: hidden;
+  border: none;
+  padding: 0;
+}
+
+/* Hover-expand: temporarily show full sidebar on mouse enter */
+.mogwser-shell__sidebar[mogwser-compact="true"][mogwser-compact-hover="true"] {
+  width: var(--mogwser-sidebar-width);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Restore labels in hover-expanded state */
+.mogwser-shell__sidebar[mogwser-compact="true"][mogwser-compact-hover="true"] .mogwser-tab__label,
+.mogwser-shell__sidebar[mogwser-compact="true"][mogwser-compact-hover="true"] .mogwser-workspace__label {
+  display: inline;
+}
+
+/* Restore side-panel in hover-expanded state */
+.mogwser-shell__sidebar[mogwser-compact="true"][mogwser-compact-hover="true"] .mogwser-shell__sidepanel-container {
+  height: auto;
+  overflow: visible;
+  border-top: 1px solid var(--mogwser-border-color);
+  padding: initial;
+}
+
+/* Splitter hidden in compact mode (sidebar is fixed-width) */
+.mogwser-shell__sidebar[mogwser-compact="true"] ~ .mogwser-shell__splitter {
+  display: none;
+}
+
+/* Restore splitter on hover-expand */
+.mogwser-shell__sidebar[mogwser-compact="true"][mogwser-compact-hover="true"] ~ .mogwser-shell__splitter {
+  display: block;
+}
+
+/* Smooth transition for content area push when compact toggles */
+.mogwser-shell__content {
+  transition: margin-left var(--mogwser-transition-speed) ease;
+}

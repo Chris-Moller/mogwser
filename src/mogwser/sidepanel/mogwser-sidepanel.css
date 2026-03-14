@@ -1,0 +1,149 @@
+/* Mogwser Side-Panel — Bottom-of-sidebar web panel styling */
+
+/* Container: collapsed by default, expanded when open */
+.mogwser-shell__sidepanel-container {
+  display: flex;
+  flex-direction: column;
+  height: 0;
+  min-height: 0;
+  overflow: hidden;
+  transition: height var(--mogwser-transition-speed) ease;
+}
+
+.mogwser-shell__sidepanel-container.mogwser-sidepanel--open {
+  min-height: 100px;
+  overflow: visible;
+}
+
+/* Resize handle at top of panel */
+.mogwser-sidepanel__resize-handle {
+  height: 4px;
+  cursor: row-resize;
+  background: var(--mogwser-border-color);
+  flex-shrink: 0;
+  transition: background var(--mogwser-transition-speed) ease;
+}
+
+.mogwser-sidepanel__resize-handle:hover,
+.mogwser-sidepanel__resize-handle--active {
+  background: var(--mogwser-primary-color);
+  height: 5px;
+}
+
+/* Header bar with URL input and close button */
+.mogwser-sidepanel__header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  background: rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+/* URL input field */
+.mogwser-sidepanel__urlbar {
+  flex: 1;
+  min-width: 0;
+  padding: 3px 6px;
+  border: 1px solid var(--mogwser-border-color);
+  border-radius: var(--mogwser-border-radius);
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--mogwser-text-primary);
+  font-size: 11px;
+  outline: none;
+  transition: border-color var(--mogwser-transition-speed) ease;
+}
+
+.mogwser-sidepanel__urlbar:focus {
+  border-color: var(--mogwser-primary-color);
+}
+
+.mogwser-sidepanel__urlbar::placeholder {
+  color: var(--mogwser-text-secondary);
+  opacity: 0.7;
+}
+
+/* Close button */
+.mogwser-sidepanel__close-btn {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: var(--mogwser-border-radius);
+  background: transparent;
+  color: var(--mogwser-text-secondary);
+  font-size: 16px;
+  line-height: 22px;
+  text-align: center;
+  cursor: pointer;
+  transition: background var(--mogwser-transition-speed) ease,
+              color var(--mogwser-transition-speed) ease;
+}
+
+.mogwser-sidepanel__close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--mogwser-text-primary);
+}
+
+/* Quick-access picker */
+.mogwser-sidepanel__picker {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px;
+  overflow-y: auto;
+}
+
+.mogwser-sidepanel__picker-empty {
+  color: var(--mogwser-text-secondary);
+  font-size: 11px;
+  text-align: center;
+  padding: 16px 8px;
+}
+
+.mogwser-sidepanel__picker-item {
+  display: block;
+  width: 100%;
+  padding: 6px 8px;
+  border: none;
+  border-radius: var(--mogwser-border-radius);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--mogwser-text-primary);
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: background var(--mogwser-transition-speed) ease;
+}
+
+.mogwser-sidepanel__picker-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.mogwser-sidepanel__picker-item:active {
+  background: var(--mogwser-primary-color);
+}
+
+/* Embedded browser panel */
+.mogwser-sidepanel__browser {
+  flex: 1;
+  border: none;
+  width: 100%;
+  min-height: 0;
+  background: #fff;
+}
+
+/* Title shown in compact hover state */
+.mogwser-sidepanel__title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--mogwser-text-secondary);
+  padding: 4px 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
