@@ -450,25 +450,30 @@ export class MogwserWorkspaces {
    * Prompt to rename a workspace using a simple inline editor.
    */
   static _promptRename(ws) {
-    const btn = MogwserWorkspaces._container.querySelector(
-      `.mogwser-workspaces__btn--active`
-    );
+    // Services.prompt.prompt returns true if OK was clicked.
+    // The entered value is read from the {value} object passed as 3rd arg.
+    const result = { value: ws.name };
+    let ok = false;
+    try {
+      ok = Services.prompt.prompt(
+        window,
+        "Rename Workspace",
+        "Enter new name:",
+        result,
+        null,
+        {}
+      );
+    } catch (e) {
+      // Fallback for non-browser contexts
+      const fallback = window.prompt?.("Enter new workspace name:", ws.name);
+      if (fallback && fallback.trim()) {
+        MogwserWorkspaces.renameWorkspace(ws.id, fallback.trim());
+      }
+      return;
+    }
 
-    // For simplicity, use a prompt. In production this would be an inline editor.
-    const newName = Services.prompt.prompt(
-      window,
-      "Rename Workspace",
-      "Enter new name:",
-      { value: ws.name },
-      null,
-      {}
-    );
-
-    // Services.prompt.prompt returns true if OK was clicked
-    // The new value is in the { value } object passed as 3rd arg
-    // Fallback: just use the workspace name if prompt isn't available
-    if (typeof newName === "string" && newName.trim()) {
-      MogwserWorkspaces.renameWorkspace(ws.id, newName.trim());
+    if (ok && result.value && result.value.trim()) {
+      MogwserWorkspaces.renameWorkspace(ws.id, result.value.trim());
     }
   }
 

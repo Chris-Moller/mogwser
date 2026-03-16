@@ -118,18 +118,26 @@ export class MogwserWorkspaceStorage {
   static async _doSave(data) {
     try {
       // Merge with last loaded data to preserve keys from other modules
-      const merged = Object.assign(
-        {},
-        MogwserWorkspaceStorage._lastLoadedData || {},
-        {
-          version: STORAGE_VERSION,
-          workspaces: data.workspaces || [],
-          tabAssignments: data.tabAssignments || {},
-        }
-      );
+      const base = MogwserWorkspaceStorage._lastLoadedData || {};
+      const merged = {
+        ...base,
+        version: STORAGE_VERSION,
+      };
 
-      // Ensure splitGroups key exists (reserved for split-view module)
-      if (!merged.splitGroups) {
+      // Only overwrite keys that are explicitly provided
+      if ("workspaces" in data) {
+        merged.workspaces = data.workspaces;
+      } else if (!merged.workspaces) {
+        merged.workspaces = [];
+      }
+      if ("tabAssignments" in data) {
+        merged.tabAssignments = data.tabAssignments;
+      } else if (!merged.tabAssignments) {
+        merged.tabAssignments = {};
+      }
+      if ("splitGroups" in data) {
+        merged.splitGroups = data.splitGroups;
+      } else if (!merged.splitGroups) {
         merged.splitGroups = {};
       }
 

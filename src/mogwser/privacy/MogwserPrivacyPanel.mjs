@@ -592,22 +592,29 @@ export class MogwserPrivacyPanel {
    * Prompt user to add a new exception (simple UI prompt).
    */
   static _promptAddException() {
-    // In the real browser we'd show a panel; here we use a simple prompt
+    // Services.prompt.prompt returns a boolean; the entered value is in the {value} object.
+    const result = { value: "" };
+    let ok = false;
     try {
-      const uri = Services.prompt.prompt(
+      ok = Services.prompt.prompt(
         window,
         "Add Site Exception",
-        "Enter the site URL to add an exception for:"
+        "Enter the site URL to add an exception for:",
+        result,
+        null,
+        {}
       );
-      if (uri) {
-        MogwserPrivacyPanel.addException(uri, PRIVACY_TOGGLES.map(t => t.pref));
-      }
     } catch (e) {
       // Fallback for non-browser contexts
-      const uri = window.prompt && window.prompt("Enter site URL for exception:");
+      const uri = window.prompt?.("Enter site URL for exception:");
       if (uri) {
         MogwserPrivacyPanel.addException(uri, PRIVACY_TOGGLES.map(t => t.pref));
       }
+      return;
+    }
+
+    if (ok && result.value) {
+      MogwserPrivacyPanel.addException(result.value, PRIVACY_TOGGLES.map(t => t.pref));
     }
   }
 }

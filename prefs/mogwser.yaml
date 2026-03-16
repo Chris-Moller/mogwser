@@ -132,3 +132,34 @@ mogwser.privacy.exceptions:
   type: string
   value: "{}"
   description: "JSON map of site URIs to per-site privacy exception metadata"
+
+# Tabs
+mogwser.tabs.close-on-middle-click:
+  type: bool
+  value: true
+  description: "Close tabs on middle-click"
+
+mogwser.tabs.show-audio-indicator:
+  type: bool
+  value: true
+  description: "Show audio playing/muted indicator on tabs"
+
+mogwser.tabs.double-click-new-tab:
+  type: bool
+  value: true
+  description: "Open new tab on double-click in tab bar"
+
+mogwser.compact.hover-delay:
+  type: int
+  value: 300
+  description: "Delay in ms before collapsing sidebar after mouse leave in compact mode"
+
+mogwser.splitview.default-direction:
+  type: string
+  value: "row"
+  description: "Default split direction (row for horizontal, column for vertical)"
+
+mogwser.theme.transition-duration:
+  type: int
+  value: 300
+  description: "Theme transition duration in milliseconds"

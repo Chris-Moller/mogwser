@@ -12,6 +12,6 @@
 
  // After session restore completes
 +    // Mogwser: Fire session restored event
-+    document.dispatchEvent(new CustomEvent("MogwserSessionRestored", {
++    window.dispatchEvent(new CustomEvent("MogwserSessionRestored", {
 +      detail: { restoredTabs: tabs }
 +    }));

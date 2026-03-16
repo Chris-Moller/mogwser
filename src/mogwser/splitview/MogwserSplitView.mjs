@@ -12,6 +12,9 @@
 const { SplitViewTree, SplitLeafNode } = ChromeUtils.importESModule(
   "chrome://mogwser/content/splitview/SplitViewTree.mjs"
 );
+const { MogwserWorkspaceStorage } = ChromeUtils.importESModule(
+  "chrome://mogwser/content/workspaces/MogwserWorkspaceStorage.mjs"
+);
 
 const lazy = {};
 ChromeUtils.defineLazyGetter(lazy, "prefs", () =>
@@ -435,9 +438,7 @@ export class MogwserSplitView {
         tree: g.tree.serialize(),
         tabIds: [...g.tabIds],
       }));
-      if (window.gMogwserWorkspaces?.storage) {
-        window.gMogwserWorkspaces.storage.set("splitGroups", data);
-      }
+      MogwserWorkspaceStorage.save({ splitGroups: data });
     } catch (e) {
       console.error("MogwserSplitView: failed to persist groups:", e);
     }
@@ -446,10 +447,10 @@ export class MogwserSplitView {
   /**
    * Restore split groups from workspace storage.
    */
-  static _restoreFromStorage() {
+  static async _restoreFromStorage() {
     try {
-      if (!window.gMogwserWorkspaces?.storage) return;
-      const data = window.gMogwserWorkspaces.storage.get("splitGroups");
+      const stored = await MogwserWorkspaceStorage.load();
+      const data = stored?.splitGroups;
       if (!Array.isArray(data)) return;
 
       for (const groupData of data) {
