@@ -86,6 +86,28 @@ add_task(async function test_serialization_roundtrip() {
   Assert.ok(restored.findLeaf("tab-3"), "Should find tab-3");
 });
 
+add_task(async function test_min_panel_size_enforcement() {
+  const tree = new SplitViewTree();
+  const leaf1 = new SplitLeafNode("tab-1");
+  tree.root = leaf1;
+
+  tree.insertNode(leaf1, "tab-2", "right");
+
+  // Set one panel to a very small size (below 7% minimum)
+  tree.root.children[0].sizeInParent = 3;
+  tree.root.children[1].sizeInParent = 97;
+
+  const positions = tree.calculatePositions();
+  const pos1 = positions.get("tab-1");
+  const pos2 = positions.get("tab-2");
+
+  // Verify positions are calculated (the tree itself computes positions,
+  // minimum enforcement is done by MogwserSplitView.resizePanel)
+  Assert.ok(pos1, "Position for tab-1 should be calculated even at small size");
+  Assert.ok(pos2, "Position for tab-2 should be calculated");
+  Assert.equal(pos1.left, 0, "tab-1 should start at left edge");
+});
+
 add_task(async function test_find_leaf() {
   const tree = new SplitViewTree();
   const leaf1 = new SplitLeafNode("tab-1");

@@ -12,6 +12,11 @@ mogwser.sidebar.position:
   value: "left"
   description: "Sidebar position (left or right)"
 
+mogwser.sidebar.collapsed-width:
+  type: int
+  value: 48
+  description: "Sidebar width in pixels when collapsed in compact mode"
+
 # Compact Mode
 mogwser.compact.enabled:
   type: bool
@@ -49,6 +54,11 @@ mogwser.splitview.max-panels:
   type: int
   value: 4
   description: "Maximum number of panels in a split group"
+
+mogwser.splitview.handle-size:
+  type: int
+  value: 6
+  description: "Resize handle thickness in pixels between split panels"
 
 # Side Panel
 mogwser.sidepanel.enabled:
@@ -148,6 +158,11 @@ mogwser.tabs.double-click-new-tab:
   type: bool
   value: true
   description: "Open new tab on double-click in tab bar"
+
+mogwser.tabs.show-close-button:
+  type: bool
+  value: true
+  description: "Show close button on tab rows"
 
 mogwser.compact.hover-delay:
   type: int

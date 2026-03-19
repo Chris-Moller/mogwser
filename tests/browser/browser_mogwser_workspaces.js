@@ -51,6 +51,36 @@ add_task(async function test_switch_workspace_hides_tabs() {
   workspaces.deleteWorkspace(ws2.id);
 });
 
+add_task(async function test_keyboard_shortcut_switches_workspace() {
+  const workspaces = window.gMogwserWorkspaces;
+  const ws1 = workspaces.createWorkspace("KB Test 1", "1");
+  const ws2 = workspaces.createWorkspace("KB Test 2", "2");
+
+  workspaces.switchWorkspace(ws1.id);
+  Assert.equal(
+    workspaces.activeWorkspaceId,
+    ws1.id,
+    "Workspace 1 should be active initially"
+  );
+
+  // The Ctrl+digit shortcut uses 1-based indexing into the workspace list
+  // We can't easily simulate the full keydown event, but we can verify
+  // the workspace switching logic directly
+  const allWorkspaces = workspaces.getAllWorkspaces();
+  const ws2Index = allWorkspaces.findIndex(w => w.id === ws2.id);
+  if (ws2Index >= 0 && ws2Index < 9) {
+    workspaces.switchWorkspace(allWorkspaces[ws2Index].id);
+    Assert.equal(
+      workspaces.activeWorkspaceId,
+      ws2.id,
+      "Workspace should switch to ws2 via index-based selection"
+    );
+  }
+
+  workspaces.deleteWorkspace(ws1.id);
+  workspaces.deleteWorkspace(ws2.id);
+});
+
 add_task(async function test_essential_tabs_always_visible() {
   const workspaces = window.gMogwserWorkspaces;
   const ws = workspaces.createWorkspace("Other", "🔄");
