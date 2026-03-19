@@ -218,10 +218,6 @@ export class MogwserThemeEngine {
     }
 
     // Mark the sidebar as transitioning (CSS uses this for ::after layer)
-    const dm = MogwserThemeEngine._darkMode;
-    const dmSettings = theme.darkMode;
-    const primary = adjustForMode(theme.colors.primary, dmSettings, dm);
-    const secondary = adjustForMode(theme.colors.secondary, dmSettings, dm);
     const newGradient = buildGradientCSS(theme.gradient);
 
     // Set the "next" gradient on a data attribute so CSS ::after can pick it up

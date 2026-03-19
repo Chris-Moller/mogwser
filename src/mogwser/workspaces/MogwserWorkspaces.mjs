@@ -67,17 +67,7 @@ export class MogwserWorkspaces {
       }
 
       // Restore tab assignments
-      if (stored.tabAssignments) {
-        for (const tab of gBrowser.tabs) {
-          const syncId = MogwserWorkspaces._getTabSyncId(tab);
-          if (syncId && stored.tabAssignments[syncId]) {
-            tab.setAttribute(
-              "mogwser-workspace-id",
-              stored.tabAssignments[syncId]
-            );
-          }
-        }
-      }
+      MogwserWorkspaces._restoreTabAssignments(stored.tabAssignments);
 
       // Activate the first default workspace, or the first one
       const defaultWs = Array.from(
@@ -526,6 +516,22 @@ export class MogwserWorkspaces {
   }
 
   /**
+   * Restore tab-to-workspace assignments from a stored map.
+   * @param {Object<string, string>} tabAssignments — syncId -> workspaceId
+   */
+  static _restoreTabAssignments(tabAssignments) {
+    if (!tabAssignments) {
+      return;
+    }
+    for (const tab of gBrowser.tabs) {
+      const syncId = MogwserWorkspaces._getTabSyncId(tab);
+      if (syncId && tabAssignments[syncId]) {
+        tab.setAttribute("mogwser-workspace-id", tabAssignments[syncId]);
+      }
+    }
+  }
+
+  /**
    * Assign any tabs without a workspace to the active workspace.
    */
   static _assignUnassignedTabs() {
@@ -559,16 +565,7 @@ export class MogwserWorkspaces {
       return;
     }
 
-    for (const tab of gBrowser.tabs) {
-      const syncId = MogwserWorkspaces._getTabSyncId(tab);
-      if (syncId && stored.tabAssignments[syncId]) {
-        tab.setAttribute(
-          "mogwser-workspace-id",
-          stored.tabAssignments[syncId]
-        );
-      }
-    }
-
+    MogwserWorkspaces._restoreTabAssignments(stored.tabAssignments);
     MogwserWorkspaces._assignUnassignedTabs();
     MogwserWorkspaces._applyTabVisibility();
     MogwserWorkspaces._renderSwitcher();

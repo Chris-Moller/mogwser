@@ -87,11 +87,7 @@ function writePref(pref, type, value) {
  * Check if a toggle is in its "active" (protective) state.
  */
 function isToggleActive(toggle) {
-  const value = readPref(toggle.pref, toggle.type);
-  if (toggle.type === "int") {
-    return value === toggle.activeValue;
-  }
-  return value === toggle.activeValue;
+  return readPref(toggle.pref, toggle.type) === toggle.activeValue;
 }
 
 export class MogwserPrivacyPanel {
