@@ -1,153 +1,88 @@
-# Mogwser Browser — Implementation Plan (Revised)
+# Mogwser Browser — Implementation Plan (Final)
 
 ## Overview
 
-Mogwser is an original Firefox fork achieving feature parity with Zen Browser. The codebase already has a substantial implementation from prior iterations, including all 8 feature modules, 4 Firefox patches, build infrastructure, CI pipeline, automated tests, branding, and documentation. This revised plan addresses gaps, inconsistencies, and missing acceptance criteria discovered during audit.
+Mogwser is an original Firefox fork achieving feature parity with Zen Browser. The codebase has a complete implementation from prior iterations covering all 8 feature modules (shell, tabs, workspaces, split-view, compact mode, side-panel, themes, privacy), 4 Firefox patches, build infrastructure, CI pipeline, automated tests, branding, and documentation.
+
+This plan addresses the remaining gaps to reach full acceptance criteria compliance.
 
 ## Current State Assessment
 
-### What Exists (Implemented)
-- **Build System**: Gluon config, 4 platform mozconfigs, GitHub Actions CI, npm scripts, docs/BUILDING.md
-- **Branding**: configure.sh, branding.nsi, content/, locales/, pref/
-- **Browser Chrome Shell**: MogwserShell.mjs (init orchestrator), mogwser-shell.xhtml (sidebar layout with slots), mogwser-shell.css (:root CSS variables)
-- **Vertical Tab Bar**: MogwserTabBar.mjs (525 lines — full tab rendering, pinned sections, context menu, middle-click close, audio mute), MogwserTabDragDrop.mjs (310 lines — HTML5 DnD with boundary enforcement)
-- **Workspace System**: MogwserWorkspaces.mjs (640 lines — CRUD, switching, tab filtering, keyboard shortcuts, session restore), MogwserWorkspaceStorage.mjs (197 lines — LZ4 compressed JSON persistence)
-- **Split-View**: MogwserSplitView.mjs (533 lines — group management, resize handles, persistence), SplitViewTree.mjs (199 lines — binary tree, serialize/deserialize, position calculation)
-- **Compact Mode**: MogwserCompactMode.mjs (198 lines — toggle, hover-expand, keyboard shortcut)
-- **Web Side-Panel**: MogwserSidePanel.mjs (368 lines — URL loading, resize, picker, persistence)
-- **Theme Engine**: MogwserThemeEngine.mjs (466 lines — CSS variable injection, dark mode, per-workspace themes, install/export), MogwserGradientPicker.mjs (567 lines — HSL wheel, 5 harmony algorithms, gradient builder)
-- **Privacy Panel**: MogwserPrivacyPanel.mjs (614 lines — toolbar button, 5 toggles, protection levels, per-site exceptions)
-- **Patches**: browser-xhtml.patch, tabbrowser-js.patch, tabs-js.patch, sessionstore.patch
-- **Tests**: 8 browser chrome tests, 4 xpcshell unit tests, TOML manifests
-- **CSS**: 1,491 lines across 8 CSS files including shell
-- **Preferences**: 27 prefs in mogwser.yaml
+### Verified Working (from code audit)
 
-### Gaps and Issues Found
+1. **Build System**: gluon.json, 4 platform mozconfigs, GitHub Actions CI, npm scripts, docs/BUILDING.md — all complete
+2. **Browser Chrome Shell**: MogwserShell.mjs initializes 7 modules in correct dependency order (ThemeEngine → TabBar → Workspaces → SplitView → CompactMode → SidePanel → PrivacyPanel)
+3. **Vertical Tab Bar**: MogwserTabBar.mjs (525 lines) with full rendering, pinned sections, context menu, audio mute, middle-click close; MogwserTabDragDrop.mjs (310 lines) with boundary enforcement
+4. **Workspace System**: MogwserWorkspaces.mjs (640 lines) with CRUD, switching, keyboard shortcuts (Ctrl+1..9), tab filtering, session restore; MogwserWorkspaceStorage.mjs (197 lines) with LZ4 persistence
+5. **Split-View**: MogwserSplitView.mjs (533 lines) correctly imports MogwserWorkspaceStorage directly; SplitViewTree.mjs (199 lines) with binary tree layout
+6. **Compact Mode**: MogwserCompactMode.mjs (198 lines) with toggle, hover-expand, Ctrl+Shift+C
+7. **Web Side-Panel**: MogwserSidePanel.mjs (368 lines) with URL loading, resize, picker, Ctrl+Shift+P
+8. **Theme Engine**: MogwserThemeEngine.mjs (466 lines) with CSS variable injection, dark/light mode, per-workspace themes, double-buffer transitions; MogwserGradientPicker.mjs (567 lines) with 5 harmony algorithms
+9. **Privacy Panel**: MogwserPrivacyPanel.mjs (614 lines) with toolbar button, 5 toggles, protection levels, per-site exceptions
+10. **Patches**: All 4 patches correct — sessionstore.patch dispatches on `window`
+11. **Event targets**: All custom events dispatch on `window` (verified)
+12. **Prompt API**: Both workspace rename and privacy exception prompts use correct `{value}` object pattern
+13. **Test manifests**: browser.toml lists 8 files, xpcshell.toml lists 4 files
+14. **Preferences**: 31 prefs in mogwser.yaml (need 3 more for complete coverage)
 
-1. **Event target inconsistency**: sessionstore.patch dispatches `MogwserSessionRestored` on `document`, but MogwserWorkspaces listens on `window`. MogwserSplitView also listens on `window`. These must be unified — all custom events should target `window` (consistent with how `MogwserWorkspaceChanged` and `MogwserThemeChanged` work).
+### Remaining Gaps
 
-2. **Workspace storage tests** test JSON.parse/stringify instead of actually exercising MogwserWorkspaceStorage.load/save. This is because IOUtils/Services aren't available in pure unit tests. The tests should be restructured or annotated to clarify they test the data model.
+#### Missing Preferences (3)
+- `mogwser.sidebar.collapsed-width` (int, 48) — referenced by compact mode but not declared
+- `mogwser.splitview.handle-size` (int, 6) — referenced by split-view but not declared
+- `mogwser.tabs.show-close-button` (bool, true) — implied by tab bar feature but not declared
 
-3. **MogwserSplitView._persistGroups()** attempts `window.gMogwserWorkspaces.storage.set()` but MogwserWorkspaces doesn't expose a `.storage` property. Should use MogwserWorkspaceStorage directly.
+#### Missing Tests (5 test functions)
+1. **rgbToHsl roundtrip test** — test_theme_colors.js only tests hslToRgb, not reverse direction
+2. **hslToHex non-primary color test** — only tests pure red (#ff0000), needs e.g. cyan or orange
+3. **Workspace keyboard shortcut test** — no test verifies Ctrl+1..9 switching
+4. **Split-view resize handle minimum test** — no test verifies 7% minimum panel size enforcement
+5. **Privacy protection level change test** — no test verifies toggling prefs changes protection level
 
-4. **Missing `rgbToHsl` roundtrip test**: The color conversion test file only tests hslToRgb, not the reverse direction.
+## Architecture (Unchanged)
 
-5. **prefs/mogwser.yaml** has 27 preferences, but the plan calls for 30+. Missing: mogwser.sidebar.collapsed-width, mogwser.splitview.handle-size, mogwser.theme.transition-duration.
-
-6. **Side panel uses `<iframe>` instead of `<browser>`**: For proper chrome-privileged browsing in Firefox, a `<xul:browser>` element is more appropriate. The current iframe approach may work but isn't optimal.
-
-7. **Workspace rename uses `Services.prompt.prompt` with wrong signature**: The method returns boolean (OK/Cancel) and mutates the `{value}` object in place — the current code checks the return as if it's the new string.
-
-## Architecture Decisions
-
-### Build Tool: Gluon (Maintained)
-**Rationale**: Already configured and working. Gluon handles Firefox source download, patch management, and cross-platform builds.
-
-**Sources**:
-- [Gluon — Build Firefox Forks with Ease](https://github.com/pulse-browser/gluon)
-- [Firefox Source Docs — Build Configuration](https://firefox-source-docs.mozilla.org/setup/configuring_build_options.html)
-
-### Modular ES Module Subsystems (Maintained)
-**Rationale**: Each feature is an independent `.mjs` file loaded via `chrome://` protocol. This mirrors Zen Browser's 15+ subsystem architecture.
-
-**Sources**:
-- [Zen Browser Code Structure](https://docs.zen-browser.app/contribute/desktop/code-structure-and-prefs)
-- [Zen Browser Architecture (DeepWiki)](https://deepwiki.com/zen-browser/desktop)
-
-### Minimal Patching Strategy (Maintained)
-**Rationale**: 4 targeted patches to `browser.xhtml`, `tabbrowser.js`, `tabs.js`, and `SessionStore.sys.mjs`. All other functionality in standalone modules.
-
-**Sources**:
-- [Ghostery Fork Architecture](https://sammacbeth.eu/building-a-firefox-fork)
-
-### Dual Storage (Maintained)
-`sessionstore.jsonlz4` for Firefox tab state + `mogwser-sessions.jsonlz4` for Mogwser metadata.
-
-**Source**: [Zen Browser Dual Storage Architecture](https://deepwiki.com/zen-browser/desktop)
-
-## Project Structure
-
+### Module Dependency Order
 ```
-mogwser/
-├── branding/mogwser/         # Branding assets (icons, names, installer config)
-├── ci/.github/workflows/     # GitHub Actions CI pipeline
-│   └── build.yml
-├── docs/                     # Build documentation
-│   └── BUILDING.md
-├── mozconfigs/               # Platform-specific mozconfig files (4 platforms)
-├── patches/                  # Firefox source patches (4 files)
-├── prefs/                    # Default preferences
-│   └── mogwser.yaml
-├── src/mogwser/
-│   ├── shell/                # Browser chrome shell (3 files)
-│   ├── tabs/                 # Vertical tab bar (3 files)
-│   ├── workspaces/           # Workspace system (3 files)
-│   ├── splitview/            # Split-view browsing (3 files)
-│   ├── compact/              # Compact/expanded modes (2 files)
-│   ├── sidepanel/            # Web side-panels (2 files)
-│   ├── themes/               # Theme engine (3 files)
-│   └── privacy/              # Privacy panel (2 files)
-├── tests/
-│   ├── browser/              # 8 Mochitest browser chrome tests
-│   └── unit/                 # 4 xpcshell unit tests
-├── gluon.json
-├── package.json
-├── PLAN.md
-└── tasks.json
+ThemeEngine → TabBar → Workspaces → SplitView → CompactMode → SidePanel → PrivacyPanel
 ```
 
-## Key Interfaces Between Modules
+### Global Singletons (on `window`)
+- `gMogwserShell`, `gMogwserThemeEngine`, `gMogwserTabBar`, `gMogwserWorkspaces`
+- `gMogwserSplitView`, `gMogwserCompactMode`, `gMogwserSidePanel`, `gMogwserPrivacyPanel`
 
-### Global Singletons (set on `window`)
-- `gMogwserShell` — shell orchestrator
-- `gMogwserThemeEngine` — theme management
-- `gMogwserTabBar` — vertical tab bar
-- `gMogwserWorkspaces` — workspace system
-- `gMogwserSplitView` — split-view manager
-- `gMogwserCompactMode` — compact/expanded toggle
-- `gMogwserSidePanel` — web side-panels
-- `gMogwserPrivacyPanel` — privacy dashboard
+### Custom Events (on `window`)
+- `MogwserSessionRestored`, `MogwserWorkspaceChanged`, `MogwserThemeChanged`
+- `MogwserCompactModeChanged`, `MogwserSplitViewChanged`
 
-### Custom Events (dispatched on `window`)
-- `MogwserWorkspaceChanged` — workspace switch
-- `MogwserThemeChanged` — theme applied
-- `MogwserCompactModeChanged` — UI mode toggle
-- `MogwserSplitViewChanged` — split layout change
-- `MogwserSessionRestored` — session restore complete
-
-### CSS Variables (`:root`)
-- `--mogwser-sidebar-width`, `--mogwser-sidebar-collapsed-width`
-- `--mogwser-primary-color`, `--mogwser-secondary-color`, `--mogwser-accent-color`
-- `--mogwser-bg-color`, `--mogwser-bg-opacity`, `--mogwser-gradient`
-- `--mogwser-compact-mode`, `--mogwser-transition-speed`
-- `--mogwser-text-primary`, `--mogwser-text-secondary`
-- `--mogwser-border-color`, `--mogwser-border-radius`
+### Storage
+- Firefox: `sessionstore.jsonlz4` (tab state)
+- Mogwser: `mogwser-sessions.jsonlz4` (workspaces, tab assignments, split groups)
 
 ## Scope Assessment
 
-**Execution mode: `parallel`** with 4 agents:
+**Execution mode: `parallel`** with 4 agents. The remaining work is small per-agent but spans all 4 domains:
 
-1. **Agent 0 — Build System & Shell**: Fix event target consistency in sessionstore.patch, add missing prefs to mogwser.yaml, verify branding completeness, ensure CI workflow handles all platforms correctly
-2. **Agent 1 — Tab Management**: Fix workspace rename prompt API, fix split-view storage integration path, improve workspace storage test coverage, ensure tab-workspace assignment is robust
-3. **Agent 2 — Advanced UI**: Fix MogwserSplitView._persistGroups to use MogwserWorkspaceStorage directly, improve compact mode CSS transitions, enhance side-panel browser element type
-4. **Agent 3 — Themes & Privacy**: Add rgbToHsl roundtrip tests, verify all 5 harmony algorithms work correctly, improve privacy panel toggle UX, add theme transition CSS
+1. **Agent 0 — Build System & Shell**: Add 3 missing prefs to mogwser.yaml, verify all branding/CI/build files
+2. **Agent 1 — Tab Management**: Add workspace keyboard shortcut test, verify tab context menu completeness
+3. **Agent 2 — Advanced UI**: Add split-view resize handle minimum test, verify compact mode and side-panel
+4. **Agent 3 — Themes & Privacy**: Add rgbToHsl roundtrip test, hslToHex non-primary test, privacy protection level test
 
-**Integration task**: Unify event targets, verify cross-module event names match, consolidate all prefs, ensure all test files parse correctly, verify module init ordering.
+**Integration task**: Verify all prefs count ≥ 34, all tests parse correctly, cross-module consistency.
 
-## Test Strategy
+## Sources
 
-- **8 Mochitest browser chrome tests**: Shell init, tabs, workspaces, split-view, compact mode, side-panel, themes, privacy
-- **4 xpcshell unit tests**: Workspace storage serialization, split-view tree operations, theme color math, theme import/export
-- All tests registered in `browser.toml` and `xpcshell.toml` manifests
-- CI runs tests via `npm test` → `./mach test testing/mogwser/`
+- [Gluon Build Tool](https://github.com/pulse-browser/gluon) — Firefox fork build system
+- [Firefox Source Docs — Build Configuration](https://firefox-source-docs.mozilla.org/setup/configuring_build_options.html)
+- [Zen Browser Code Structure](https://docs.zen-browser.app/contribute/desktop/code-structure-and-prefs)
+- [Zen Browser Architecture (DeepWiki)](https://deepwiki.com/zen-browser/desktop)
+- [Ghostery Fork Architecture](https://sammacbeth.eu/building-a-firefox-fork)
 
-## Risks and Mitigations
+## Risk Assessment
 
-| Risk | Mitigation |
-|------|-----------|
-| Event target mismatch between patches and modules | Standardize all events on `window`; audit in integration |
-| IOUtils not available in xpcshell tests | Test data model separately, annotate tests |
-| Side-panel iframe vs browser element | Fallback approach works; document limitation |
-| Workspace rename prompt API mismatch | Fix to use `{value}` object pattern correctly |
-| Firefox source download in CI (~1 GB) | Use caching, sccache for compilation cache |
-| Build takes 1-3 hours per platform | Incremental builds, PGO only for release |
+| Risk | Status |
+|------|--------|
+| Event target mismatch | **Fixed** — all events on `window` |
+| Storage import in SplitView | **Fixed** — imports MogwserWorkspaceStorage directly |
+| Prompt API misuse | **Fixed** — both prompts use `{value}` object pattern |
+| Missing prefs | **Open** — 3 prefs need to be added |
+| Missing test coverage | **Open** — 5 test functions need to be added |
